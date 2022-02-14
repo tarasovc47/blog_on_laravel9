@@ -168,3 +168,8 @@ docker-compose exec app composer install
 
 ### и генерим ключ
 docker-compose exec app php artisan key:generate
+
+### генерим базовый контроллер блога и контроллер статей
+docker-compose exec app php artisan make:Controller Blog/BaseController
+docker-compose exec app php artisan make:Controller Blog/ArticleController --resource
+docker-compose exec app php artisan make:model Blog/Article
