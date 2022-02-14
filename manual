@@ -172,7 +172,10 @@ docker-compose exec app php artisan key:generate
 ### генерим базовый контроллер блога и контроллер статей
 docker-compose exec app php artisan make:Controller Blog/BaseController
 docker-compose exec app php artisan make:Controller Blog/ArticleController --resource
-docker-compose exec app php artisan make:model Blog/Article
+docker-compose exec app php artisan make:model Blog/BlogArticle
 
 ### подключен dbal для редактирования столбцов
 docker-compose exec app composer require doctrine/dbal
+
+### подключаем debugbar
+docker-compose exec app composer require barryvdh/laravel-debugbar --dev
