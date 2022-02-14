@@ -173,3 +173,6 @@ docker-compose exec app php artisan key:generate
 docker-compose exec app php artisan make:Controller Blog/BaseController
 docker-compose exec app php artisan make:Controller Blog/ArticleController --resource
 docker-compose exec app php artisan make:model Blog/Article
+
+### подключен dbal для редактирования столбцов
+docker-compose exec app composer require doctrine/dbal
