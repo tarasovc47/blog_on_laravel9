@@ -16,3 +16,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('home');
 });
+
+Route::group(['namespace' => 'App\Http\Controllers\Blog', 'prefix' => 'blog'], function (){
+    Route::resource('articles', 'ArticleController')->names('blog.articles');
+});

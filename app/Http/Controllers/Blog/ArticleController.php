@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog;
 
+use App\Models\Blog\BlogArticle;
 use Illuminate\Http\Request;
 
 class ArticleController extends BaseController
@@ -13,7 +14,8 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $items = Blog
+        $items = BlogArticle::all();
+        return view('blog.articles.index', compact('items'));
     }
 
     /**
