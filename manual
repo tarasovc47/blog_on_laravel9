@@ -179,3 +179,12 @@ docker-compose exec app composer require doctrine/dbal
 
 ### подключаем debugbar
 docker-compose exec app composer require barryvdh/laravel-debugbar --dev
+
+### при помощи composer подключаем UI и блок авторизации/регистрации
+docker-compose exec app composer require laravel/ui
+docker-compose exec app php artisan ui vie --auth
+docker-compose exec app php artisan migrate
+
+### устанавливаем bootstrap и запускаем перекомпиляцию ресурсов
+docker-compose exec app npm install bootstrap
+docker-compose exec app npm run development
