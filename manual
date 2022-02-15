@@ -188,3 +188,19 @@ docker-compose exec app php artisan migrate
 ### устанавливаем bootstrap и запускаем перекомпиляцию ресурсов
 docker-compose exec app npm install bootstrap
 docker-compose exec app npm run development
+
+### устанавливаем redis
+docker-compose exec app composer require predis/predis
+### в дефолтном конфиге redis задаём пароль, создаём отдельный докер-файл для редиса, (иначе идёт конфликт переменных внутри Dockerfile):
+FROM redis:6.2
+COPY docker-compose/redis/redis.conf /usr/local/etc/redis/redis.conf
+CMD [ "redis-server", "/usr/local/etc/redis/redis.conf" ]
+### и дополняем docker-compose.yml
+redis:
+    build:
+        context: ./docker-compose/redis
+        dockerfile: Dockerfile
+    ports:
+        - 6379:6379
+    networks:
+        - larablog

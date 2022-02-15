@@ -51,6 +51,15 @@ services:
         networks:
             - larablog
 
+    redis:
+        build:
+            context: ./docker-compose/redis
+            dockerfile: Dockerfile
+        ports:
+            - 6379:6379
+        networks:
+            - larablog
+
 networks:
     larablog:
         driver: bridge
