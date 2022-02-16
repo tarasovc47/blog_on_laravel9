@@ -204,3 +204,7 @@ redis:
         - 6379:6379
     networks:
         - larablog
+
+### создаём ресурсный контроллер категорий
+docker-compose exec app php artisan make:Controller Blog/Admin/CategoryController --resource
+docker-compose exec app php artisan make:Controller Blog/Admin/BaseController
