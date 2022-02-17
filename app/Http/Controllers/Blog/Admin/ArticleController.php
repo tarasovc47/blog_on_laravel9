@@ -1,6 +1,7 @@
 <?php
 
-namespace App\Http\Controllers\Blog;
+namespace App\Http\Controllers\Blog\Admin;
+
 
 use App\Models\Blog\Article;
 use Illuminate\Http\Request;
@@ -14,7 +15,7 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $items = Article::all();
+        $items = Article::paginate(5);
         return view('blog.articles.index', compact('items'));
     }
 

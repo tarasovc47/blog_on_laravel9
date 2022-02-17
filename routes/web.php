@@ -36,5 +36,7 @@ Route::group($groupData, function (){
     Route::resource('categories', 'CategoryController')
         ->only($methods)
         ->names('blog.admin.categories');
+    Route::resource('articles', 'ArticleController')
+        ->names('blog.admin.articles');
 });
 // <--- админка блога
