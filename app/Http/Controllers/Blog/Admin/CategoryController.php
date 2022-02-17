@@ -47,7 +47,7 @@ class CategoryController extends BaseController
      */
     public function edit($id)
     {
-        $category = Category::where('id', $id)->first();
+        $category = Category::find($id)->first();
         return view('blog.admin.categories.edit', compact('category'));
     }
 
@@ -60,6 +60,24 @@ class CategoryController extends BaseController
      */
     public function update(Request $request, $id)
     {
-        //
+        $category = Category::find($id);
+        if (empty($category))
+        {
+            return back()
+                ->withErrors(['msg' => 'Запись с id=' . $id . ' не найдена'])
+                ->withInput();
+        }
+        $data = $request->all();
+        $result = $category->fill($data)->save();
+
+        if ($result) {
+            return redirect()
+                ->route('blog.admin.categories.edit', $category->id)
+                ->with(['success' => 'Успешно сохранено']);
+        } else {
+            return back()
+                ->withErrors(['msg' => 'Ошибка сохранения'])
+                ->withInput();
+        }
     }
 }
