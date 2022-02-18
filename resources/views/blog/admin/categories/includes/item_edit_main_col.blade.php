@@ -17,6 +17,9 @@
                         <div class="form-group">
                             <label for="title">Заголовок</label>
                             <input name="title" value="{{ $category->title }}" id="title" type="text" class="form-control" minlength="3" required>
+                            <br>
+                            <label for="title">Идентификатор</label>
+                            <input name="slug" value="{{ $category->slug }}" id="slug" type="text" class="form-control" minlength="3" disabled>
                         </div>
                     </div>
                 </div>

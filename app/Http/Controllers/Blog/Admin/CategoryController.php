@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Blog\Admin;
 
 use App\Models\Blog\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class CategoryController extends BaseController
 {
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function index()
     {
@@ -43,7 +44,7 @@ class CategoryController extends BaseController
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
     public function edit($id)
     {
@@ -56,19 +57,21 @@ class CategoryController extends BaseController
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\Response
      */
     public function update(Request $request, $id)
     {
         $category = Category::find($id);
-        if (empty($category))
-        {
+        if (empty($category)) {
             return back()
-                ->withErrors(['msg' => 'Запись с id=' . $id . ' не найдена'])
+                ->withErrors(['msg' => "Запись с id=[{$id}] не найдена"])
                 ->withInput();
         }
         $data = $request->all();
-        $result = $category->fill($data)->save();
+        $data['slug'] = Str::slug($data['title']);
+        $result = $category
+            ->fill($data)
+            ->save();
 
         if ($result) {
             return redirect()

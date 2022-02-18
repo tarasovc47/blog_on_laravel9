@@ -16,5 +16,8 @@ class Category extends Model
         return 'blog_categories';
     }
 
-    protected $fillable = ['title'];
+    protected $fillable = [
+        'title',
+        'slug'
+    ];
 }
