@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Blog\Admin;
 
+use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\Blog\Category;
 use Illuminate\Http\Request;
@@ -17,28 +18,46 @@ class CategoryController extends BaseController
     public function index()
     {
         $paginator = Category::paginate(5);
-        return view('blog.categories.index', compact('paginator'));
+        return view('blog.admin.categories.index', compact('paginator'));
     }
 
     /**
      * Show the form for creating a new resource.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View
      */
     public function create()
     {
-        //
+        $category = new Category();
+        $categoryList = Category::all();
+        return view('blog.admin.categories.edit',
+            compact('category', 'categoryList'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function store(Request $request)
+    public function store(BlogCategoryCreateRequest $request)
     {
-        //
+        $data = $request->input();
+        if (empty($data['slug']))
+        {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        $category = new Category($data);
+        $category->save();
+
+        if ($category instanceof Category) {
+            return redirect()->route('blog.admin.categories.edit', [$category->id])
+                ->with(['success' => 'Категория сохранена']);
+        } else {
+            return back()->withErrors(['msg' => 'Ошибка сохранения категории'])
+                ->withInput();
+        }
     }
 
     /**
@@ -49,7 +68,7 @@ class CategoryController extends BaseController
      */
     public function edit($id)
     {
-        $category = Category::find($id)->first();
+        $category = Category::find($id);
         return view('blog.admin.categories.edit', compact('category'));
     }
 
@@ -70,9 +89,7 @@ class CategoryController extends BaseController
         }
         $data = $request->all();
         $data['slug'] = Str::slug($data['title']);
-        $result = $category
-            ->fill($data)
-            ->save();
+        $result = $category->update($data);
 
         if ($result) {
             return redirect()
