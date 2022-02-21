@@ -7,6 +7,7 @@ use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\Blog\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use App\Repositories\BlogCategoryRepository;
 
 class CategoryController extends BaseController
 {
@@ -66,10 +67,17 @@ class CategoryController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\View\View|\Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, BlogCategoryRepository $categoryRepository)
     {
-        $category = Category::find($id);
-        return view('blog.admin.categories.edit', compact('category'));
+        /*$category = Category::find($id);
+        return view('blog.admin.categories.edit', compact('category'));*/
+        $category = $categoryRepository->getEdit($id);
+        if (empty($category)) {
+            abort(404);
+        }
+        $categoryList = $categoryRepository->getForComboBox();
+
+        return view('blog.admin.categories.edit', compact('category','categoryList'));
     }
 
     /**
