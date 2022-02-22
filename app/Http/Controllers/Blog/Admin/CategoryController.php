@@ -5,12 +5,22 @@ namespace App\Http\Controllers\Blog\Admin;
 use App\Http\Requests\BlogCategoryCreateRequest;
 use App\Http\Requests\BlogCategoryUpdateRequest;
 use App\Models\Blog\Category;
-use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use App\Repositories\BlogCategoryRepository;
 
 class CategoryController extends BaseController
 {
+    /**
+     * @var BlogCategoryRepository
+     */
+    private $blogCategoryRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->blogCategoryRepository = app(BlogCategoryRepository::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -18,7 +28,7 @@ class CategoryController extends BaseController
      */
     public function index()
     {
-        $paginator = Category::paginate(5);
+        $paginator = $this->blogCategoryRepository->getAllWithPaginate(10);
         return view('blog.admin.categories.index', compact('paginator'));
     }
 
@@ -30,9 +40,8 @@ class CategoryController extends BaseController
     public function create()
     {
         $category = new Category();
-        $categoryList = Category::all();
         return view('blog.admin.categories.edit',
-            compact('category', 'categoryList'));
+            compact('category'));
     }
 
     /**
@@ -69,15 +78,11 @@ class CategoryController extends BaseController
      */
     public function edit($id, BlogCategoryRepository $categoryRepository)
     {
-        /*$category = Category::find($id);
-        return view('blog.admin.categories.edit', compact('category'));*/
         $category = $categoryRepository->getEdit($id);
         if (empty($category)) {
             abort(404);
         }
-        $categoryList = $categoryRepository->getForComboBox();
-
-        return view('blog.admin.categories.edit', compact('category','categoryList'));
+        return view('blog.admin.categories.edit', compact('category'));
     }
 
     /**
@@ -89,7 +94,7 @@ class CategoryController extends BaseController
      */
     public function update(BlogCategoryUpdateRequest $request, $id)
     {
-        $category = Category::find($id);
+        $category = $this->blogCategoryRepository->getEdit($id);
         if (empty($category)) {
             return back()
                 ->withErrors(['msg' => "Запись с id=[{$id}] не найдена"])

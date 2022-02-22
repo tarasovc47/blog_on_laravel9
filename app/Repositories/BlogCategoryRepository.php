@@ -24,11 +24,14 @@ class BlogCategoryRepository extends CoreRepository
         return Model::class;
     }
 
-    /**
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    public function getForComboBox()
+    public function getAllWithPaginate($perPage = null)
     {
-        return $this->startConditions()->all();
+        $columns = ['id', 'title'];
+
+        $result = $this
+            ->startConditions()
+            ->select($columns)
+            ->paginate($perPage);
+        return $result;
     }
 }
