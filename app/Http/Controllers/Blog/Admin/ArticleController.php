@@ -4,10 +4,23 @@ namespace App\Http\Controllers\Blog\Admin;
 
 
 use App\Models\Blog\Article;
+use App\Repositories\BlogArticleRepository;
 use Illuminate\Http\Request;
 
 class ArticleController extends BaseController
 {
+    /**
+     * @var BlogArticleRepository
+     */
+    private $blogArticleRepository;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->blogArticleRepository = app(BlogArticleRepository::class);
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -15,8 +28,8 @@ class ArticleController extends BaseController
      */
     public function index()
     {
-        $items = Article::paginate(5);
-        return view('blog.articles.index', compact('items'));
+        $paginator = $this->blogArticleRepository->getAllWithPaginate();
+        return view('blog.admin.articles.index', compact('paginator'));
     }
 
     /**

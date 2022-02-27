@@ -33,10 +33,13 @@ $groupData = [
 
 Route::group($groupData, function (){
     $methods = ['index', 'edit', 'store', 'update', 'create'];
+    // маршруты категорий
     Route::resource('categories', 'CategoryController')
         ->only($methods)
         ->names('blog.admin.categories');
+    // маршруты статей
     Route::resource('articles', 'ArticleController')
+        ->except(['show'])
         ->names('blog.admin.articles');
 });
 // <--- админка блога
