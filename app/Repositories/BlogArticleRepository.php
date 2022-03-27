@@ -13,6 +13,16 @@ class BlogArticleRepository extends CoreRepository
     }
 
     /**
+     * получить модель для редактирования в админке
+     * @param int $id
+     * @return Model
+     */
+    public function getEdit(int $id)
+    {
+        return $this->startConditions()->find($id);
+    }
+
+    /**
      * @param int $perPage
      * @return LengthAwarePaginator
      * получить список всех статей для вывода в списке в админке

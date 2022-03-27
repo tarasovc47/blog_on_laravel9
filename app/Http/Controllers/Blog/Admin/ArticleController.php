@@ -59,9 +59,13 @@ class ArticleController extends BaseController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($id, BlogArticleRepository $articleRepository)
     {
-        dd(__METHOD__, $id);
+        $article = $articleRepository->getEdit($id);
+        if (empty($article)) {
+            abort(404);
+        }
+        return view('blog.admin.articles.edit', compact('article'));
     }
 
     /**
