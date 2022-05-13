@@ -26,7 +26,6 @@ return new class extends Migration
     public function down()
     {
         Schema::table('blog_categories', function (Blueprint $table){
-            $table->dropIndex('slug');
             $table->dropColumn('slug');
         });
     }
